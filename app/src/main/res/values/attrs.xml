@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="ImageWithText">
+        <attr name="titleText" format="string" localization="suggested" />
+        <attr name="imageRef" format="reference" />
+    </declare-styleable>
+</resources>
