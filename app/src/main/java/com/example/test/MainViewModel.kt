@@ -1,18 +1,14 @@
 package com.example.test
 
-import android.app.Application
-import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.Transformations
+import androidx.lifecycle.*
 
-class MainViewModel(application: Application) : AndroidViewModel(application) {
+class MainViewModel(private val repository: MainRepository) : ViewModel() {
 
     private val _id: MutableLiveData<Int> = MutableLiveData()
 
     val todos: LiveData<Todos> = Transformations
         .switchMap(_id) {
-            MainRepository.getTodos(it)
+            repository.getTodos(it)
         }
 
     fun setId(id: Int) {
@@ -22,6 +18,16 @@ class MainViewModel(application: Application) : AndroidViewModel(application) {
     }
 
     fun cancelJobs() {
-        MainRepository.cancelJobs()
+        repository.cancelJobs()
+    }
+}
+
+class MainViewModelFactory(private val repository: MainRepository) : ViewModelProvider.Factory {
+    override fun <T : ViewModel> create(modelClass: Class<T>): T {
+        if (modelClass.isAssignableFrom(MainViewModel::class.java)) {
+            @Suppress("UNCHECKED_CAST")
+            return MainViewModel(repository) as T
+        }
+        throw IllegalArgumentException("Unknown ViewModel class")
     }
 }

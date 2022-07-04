@@ -2,11 +2,13 @@ package com.example.test
 
 import androidx.lifecycle.LiveData
 import com.example.test.repo.RetrofitBuilder
+import com.example.test.room.DatabaseHandler
+import com.example.test.room.TodosDao
 import kotlinx.coroutines.*
 import kotlinx.coroutines.Dispatchers.IO
 import kotlinx.coroutines.Dispatchers.Main
 
-object MainRepository {
+class MainRepository(private val todosDao: TodosDao) {
 
     var job: CompletableJob? = null
 
@@ -28,6 +30,10 @@ object MainRepository {
                 }
             }
         }
+    }
+
+    suspend fun insert(todos: Todos) {
+        todosDao.insert(todos)
     }
 
     fun cancelJobs() {

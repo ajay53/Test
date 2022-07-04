@@ -14,14 +14,19 @@ import java.util.*
 
 class MainActivity : AppCompatActivity(R.layout.activity_main), View.OnClickListener {
 
-    private lateinit var viewModel: MainViewModel
+    private val viewModel: MainViewModel by lazy {
+        ViewModelProvider(
+            this,
+            MainViewModelFactory((application as App).mainRepository)
+        )[MainViewModel::class.java]
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         val viewBinding: ActivityMainBinding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(viewBinding.root)
 
-        viewModel = ViewModelProvider(this).get(MainViewModel::class.java)
+//        viewModel = ViewModelProvider(this)[MainViewModel::class.java]
         viewModel.todos.observe(this, Observer {
             Log.d(TAG, "onCreate: todos: ${it.toString()}")
             txt_data.text = it.toString()
