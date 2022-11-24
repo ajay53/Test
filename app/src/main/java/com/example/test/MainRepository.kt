@@ -19,12 +19,17 @@ class MainRepository(private val todosDao: TodosDao) {
                 super.onActive()
                 job?.let {
                     CoroutineScope(IO + it).launch {
-                        val todos: Todos = RetrofitBuilder.fakeApiService.getTodos(id)
+//                        val todos: Todos = RetrofitBuilder.fakeApiService.getTodos(id)
+                        val resBody = RetrofitBuilder.fakeApiService.getTodosBody(id)
+                        resBody.body()
+                        resBody.code()
+                        resBody.message()
                         /*withContext(Main){
                             value = todos
                             it.complete()
                         }*/
-                        postValue(todos)
+                        postValue(resBody.body())
+//                        postValue(todos)
                         it.complete()
                     }
                 }
